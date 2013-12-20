@@ -1,0 +1,38 @@
+{
+  "builders": [{
+    "vm_name": "tinycore",
+    "type": "virtualbox",
+    "http_directory": "http",
+    "iso_url": "http://distro.ibiblio.org/tinycorelinux/5.x/x86/release/Core-current.iso",
+    "iso_checksum": "ad4f43928ca9a0b288ef2f69b7035132034e327040596d3de7dff919d30eddaa",
+    "iso_checksum_type": "sha256",
+    "guest_os_type": "Linux26_64",
+    "virtualbox_version_file": ".vbox_version",
+    "ssh_wait_timeout": "10000s",
+    "boot_command": [
+      "<enter>"
+    ],
+    "shutdown_command": "sudo poweroff",
+    "disk_size": 10140,
+    "vboxmanage": [
+      ["modifyvm", "{{.Name}}", "--memory", "512"],
+      ["modifyvm", "{{.Name}}", "--cpus", "1"]
+    ]
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "scripts": [
+      "script/nanocore.sh"
+    ],
+    "override": {
+      "virtualbox": {
+        "execute_command": "{{.Vars}} sudo -E -S sh '{{.Path}}'"
+      }
+    }
+  }],
+  "post-processors": [{
+    "type": "vagrant",
+    "keep_input_artifact": false,
+    "output": "../../{{.Provider}}/tinycore.box"
+  }]
+}

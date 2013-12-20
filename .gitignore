@@ -1,0 +1,9 @@
+packer_cache
+output-*
+*.box
+*.tar.gz
+iso
+crash.log
+tmp
+
+.DS_Store
